@@ -15,16 +15,8 @@ export interface LeadData {
  * and Google Apps Script receives the data via e.parameter.
  */
 export async function submitLead(data: LeadData): Promise<{ success: boolean; error?: string }> {
-  const url = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
-
-  if (!url || url.trim() === "") {
-    console.warn(
-      "VITE_GOOGLE_SCRIPT_URL is not configured. Lead submission mocked.",
-      data
-    );
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    return { success: true };
-  }
+  // Fallback to the known public macro URL if the env var is not set in Vercel
+  const url = import.meta.env.VITE_GOOGLE_SCRIPT_URL || "https://script.google.com/macros/s/AKfycbyKNPJ-ceoEd98qWQb3vzmd2lQ9Hy1raGGPU6crsBqc-KJYOCKQyZmRcviONRwQoiUT/exec";
 
   try {
     // Build URL-encoded form body
