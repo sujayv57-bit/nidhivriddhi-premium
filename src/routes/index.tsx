@@ -13,9 +13,9 @@ import { submitLead } from "@/lib/leads";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Nidhivriddhi — Personal Loans From 9.99% p.a. | 25+ Lending Partners" },
+      { title: "Nidhivriddhi | Personal Loans From 9.99% p.a. | 25+ Lending Partners" },
       { name: "description", content: "Compare loan offers from 25+ leading banks & NBFCs. Personal, business, home loans with dedicated relationship managers." },
-      { property: "og:title", content: "Nidhivriddhi — Premium Loan Solutions" },
+      { property: "og:title", content: "Nidhivriddhi | Premium Loan Solutions" },
       { property: "og:description", content: "₹500 Cr+ funding facilitated. Check eligibility in 60 seconds." },
       { property: "og:url", content: "/" },
     ],
@@ -99,7 +99,7 @@ function Header() {
 /* -------------------- HERO -------------------- */
 function Hero() {
   return (
-    <section className="relative isolate overflow-hidden bg-hero pt-28 pb-20 lg:pt-32 lg:pb-28">
+    <section className="relative isolate overflow-hidden bg-hero pt-24 pb-14 lg:pt-28 lg:pb-20">
       {/* Decorative glow */}
       <div aria-hidden className="pointer-events-none absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full opacity-30 blur-3xl" style={{ background: "radial-gradient(circle, oklch(0.78 0.13 82) 0%, transparent 70%)" }} />
       <div aria-hidden className="pointer-events-none absolute top-1/3 -right-40 h-[600px] w-[600px] rounded-full opacity-20 blur-3xl" style={{ background: "radial-gradient(circle, oklch(0.5 0.15 158) 0%, transparent 70%)" }} />
@@ -116,15 +116,15 @@ function Hero() {
             <span className="text-gradient-gold">9.99% p.a.</span>
           </h1>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-white/75 sm:text-lg">
-            Competitive rates, a dedicated relationship manager, and funding solutions tailored for eligible customers — sourced from 25+ leading banks & NBFCs.
+            Need funds for travel, education, medical expenses, home renovation, or debt consolidation? Check your eligibility in minutes and discover loan options from India's leading lenders.
           </p>
 
           <ul className="mt-8 grid max-w-xl grid-cols-1 gap-2.5 sm:grid-cols-2">
             {[
-              "Multiple Banking Partners",
+              "Zero Service Charges for Applicants",
+              "Compare 25+ Bank & NBFC Offers",
               "Dedicated Relationship Manager",
-              "End-to-End Assistance",
-              "Fast Processing Support",
+              "End-to-End Documentation Support",
             ].map((t) => (
               <li key={t} className="flex items-center gap-2.5 rounded-xl glass-dark px-3.5 py-2.5 text-sm text-white/90">
                 <CheckCircle2 className="h-4 w-4 shrink-0 text-gold" /> {t}
@@ -135,15 +135,12 @@ function Hero() {
           <div className="mt-8 flex items-center gap-5 text-xs text-white/60">
             <div className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-gold" /> RBI-regulated lenders</div>
             <div className="hidden h-3 w-px bg-white/20 sm:block" />
-            <div className="flex items-center gap-1.5"><Lock className="h-4 w-4 text-gold" /> 256-bit SSL secured</div>
+            <div className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-gold" /> No Impact on Credit Score*</div>
           </div>
         </div>
 
-        {/* Right: Form + floating image */}
+        {/* Right: Form */}
         <div className="relative">
-          <div className="absolute -top-10 -right-6 hidden lg:block animate-float">
-            <img src={heroImg} alt="Premium banking app interface with golden coins" width={420} height={420} className="w-[340px] rounded-3xl shadow-luxe ring-1 ring-gold/30" />
-          </div>
           <div className="relative z-10 rounded-3xl glass p-6 shadow-luxe sm:p-8">
             <LeadForm compact={false} />
           </div>
@@ -168,6 +165,8 @@ function LeadForm({ compact }: { compact: boolean }) {
   });
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [mobileError, setMobileError] = useState("");
   const [done, setDone] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -191,12 +190,42 @@ function LeadForm({ compact }: { compact: boolean }) {
     };
   }, [amount]);
 
-  const next = () => setStep((s) => Math.min(3, s + 1));
-  const back = () => setStep((s) => Math.max(1, s - 1));
+  const next = () => {
+    if (step === 2) {
+      if (name.trim().length < 2) {
+        setNameError("Please enter your full name (at least 2 characters)");
+        return;
+      }
+      setNameError("");
+    }
+    setStep((s) => Math.min(3, s + 1));
+  };
+  
+  const back = () => {
+    setNameError("");
+    setMobileError("");
+    setStep((s) => Math.max(1, s - 1));
+  };
 
   const submit = async () => {
-    if (!/^[6-9]\d{9}$/.test(mobile)) return alert("Enter a valid 10-digit mobile number");
-    if (name.trim().length < 2) return alert("Enter your full name");
+    let hasError = false;
+    
+    if (name.trim().length < 2) {
+      setNameError("Please enter your full name");
+      setStep(2);
+      hasError = true;
+    } else {
+      setNameError("");
+    }
+
+    if (!/^[6-9]\d{9}$/.test(mobile)) {
+      setMobileError("Please enter a valid 10-digit mobile number");
+      hasError = true;
+    } else {
+      setMobileError("");
+    }
+
+    if (hasError) return;
     
     let extraData = {};
     try {
@@ -236,7 +265,7 @@ function LeadForm({ compact }: { compact: boolean }) {
           <CheckCircle2 className="h-8 w-8 text-primary" />
         </div>
         <h3 className="font-display text-2xl font-semibold text-primary">You're in good hands</h3>
-        <p className="mt-2 text-sm text-muted-foreground">A relationship manager will call you within 15 minutes with personalized offers.</p>
+        <p className="mt-2 text-sm text-muted-foreground">A relationship manager will call you with personalized offers.</p>
       </div>
     );
   }
@@ -259,7 +288,7 @@ function LeadForm({ compact }: { compact: boolean }) {
 
       {step === 1 && (
         <div className="space-y-4 animate-fade-up">
-          <label className="block text-sm font-medium text-foreground">Loan Amount Required</label>
+          <label className="block text-sm font-medium text-foreground">Enter or Slide the loan amount you're looking for</label>
           <div className="flex items-baseline gap-2 rounded-2xl border border-input bg-white/70 px-4 py-3">
             <span className="text-lg font-semibold text-primary">₹</span>
             <input
@@ -285,8 +314,14 @@ function LeadForm({ compact }: { compact: boolean }) {
       {step === 2 && (
         <div className="space-y-4 animate-fade-up">
           <label className="block text-sm font-medium">Full Name</label>
-          <input autoFocus value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Rohan Sharma"
-            className="w-full rounded-2xl border border-input bg-white/70 px-4 py-3.5 text-base outline-none focus:border-primary" />
+          <input autoFocus value={name} 
+            onChange={(e) => {
+              setName(e.target.value);
+              if (nameError) setNameError("");
+            }} 
+            placeholder="e.g. Rohan Sharma"
+            className={`w-full rounded-2xl border bg-white/70 px-4 py-3.5 text-base outline-none focus:border-primary ${nameError ? "border-rose-500 focus:border-rose-500" : "border-input"}`} />
+          {nameError && <p className="text-xs font-medium text-rose-500 mt-1">{nameError}</p>}
           <div className="flex gap-2">
             <button onClick={back} className="rounded-2xl border border-border px-4 py-3 text-sm font-medium">Back</button>
             <CtaButton onClick={next}>Continue <ArrowRight className="h-4 w-4" /></CtaButton>
@@ -297,18 +332,24 @@ function LeadForm({ compact }: { compact: boolean }) {
       {step === 3 && (
         <div className="space-y-4 animate-fade-up">
           <label className="block text-sm font-medium">Mobile Number</label>
-          <div className="flex items-center gap-2 rounded-2xl border border-input bg-white/70 px-4 py-3.5">
+          <div className={`flex items-center gap-2 rounded-2xl border bg-white/70 px-4 py-3.5 ${mobileError ? "border-rose-500 focus-within:border-rose-500" : "border-input focus-within:border-primary"}`}>
             <span className="text-sm font-medium text-muted-foreground">+91</span>
-            <input autoFocus disabled={submitting} value={mobile} onChange={(e) => setMobile(e.target.value.replace(/\D/g, "").slice(0, 10))} placeholder="10-digit mobile"
+            <input autoFocus disabled={submitting} value={mobile} 
+              onChange={(e) => {
+                setMobile(e.target.value.replace(/\D/g, "").slice(0, 10));
+                if (mobileError) setMobileError("");
+              }} 
+              placeholder="10-digit mobile"
               className="w-full bg-transparent text-base outline-none disabled:opacity-50" />
           </div>
+          {mobileError && <p className="text-xs font-medium text-rose-500 mt-1">{mobileError}</p>}
           <div className="flex gap-2">
             <button onClick={back} disabled={submitting} className="rounded-2xl border border-border px-4 py-3 text-sm font-medium disabled:pointer-events-none disabled:opacity-50">Back</button>
             <CtaButton onClick={submit} disabled={submitting}>
               {submitting ? "Submitting..." : <>Check Eligibility <ArrowRight className="h-4 w-4" /></>}
             </CtaButton>
           </div>
-          <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground"><Lock className="h-3.5 w-3.5" /> Secure & Confidential — your data is encrypted.</p>
+          <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground"><Lock className="h-3.5 w-3.5" /> Secure & Confidential. Your data is encrypted.</p>
         </div>
       )}
     </div>
@@ -336,7 +377,7 @@ function BankPill({ name }: { name: string }) {
 function BanksMarquee() {
   const loop = [...BANKS, ...BANKS];
   return (
-    <section className="border-b border-border bg-gradient-to-b from-background to-secondary py-16 lg:py-20">
+    <section className="bg-gradient-to-b from-background to-secondary py-10 lg:py-12">
       <div className="mx-auto max-w-7xl px-5 text-center lg:px-10">
         <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary-glow">Trusted Lending Partners</div>
         <h2 className="mt-3 font-display text-3xl font-semibold text-primary sm:text-4xl lg:text-[2.75rem]">
@@ -399,9 +440,9 @@ function Counter({ value, suffix, prefix, label, icon: Icon }: { value: number; 
 
 function TrustCounters() {
   return (
-    <section className="bg-secondary pb-20">
+    <section className="bg-secondary pb-12">
       <div className="mx-auto grid max-w-7xl gap-4 px-5 sm:grid-cols-2 lg:grid-cols-4 lg:px-10">
-        <Counter icon={Wallet} prefix="₹" value={500} suffix="+ Cr" label="Funding Facilitated" />
+        <Counter icon={Wallet} prefix="₹" value={500} suffix="+ Cr" label="Personal Loans Facilitated" />
         <Counter icon={Users} value={10000} suffix="+" label="Customers Assisted" />
         <Counter icon={Building2} value={25} suffix="+" label="Lending Partners" />
         <Counter icon={Award} value={100} suffix="%" label="Dedicated Support" />
@@ -413,12 +454,12 @@ function TrustCounters() {
 /* -------------------- Why Us -------------------- */
 function WhyUs() {
   const items = [
-    { icon: Building2, title: "Multiple Lender Comparison", desc: "Side-by-side offers from 25+ leading banks and NBFCs." },
-    { icon: Users, title: "Dedicated Relationship Manager", desc: "A single point of contact through every stage of your loan." },
-    { icon: Clock, title: "Faster Processing Guidance", desc: "Streamlined documentation and follow-ups for quicker turnaround." },
-    { icon: TrendingUp, title: "Competitive Funding Solutions", desc: "Offers tailored to your profile, income, and repayment capacity." },
-    { icon: Sparkles, title: "Expert Consultation", desc: "Advisory from professionals who understand lender requirements." },
-    { icon: ShieldCheck, title: "End-to-End Support", desc: "From document collection to disbursal — we manage it all." },
+    { icon: Building2, title: "Compare Multiple Lenders", desc: "Access loan options from 25+ banks and NBFCs through a single application." },
+    { icon: Wallet, title: "₹0 Service Charges", desc: "Our advisory and processing support comes at no cost to eligible applicants." },
+    { icon: Users, title: "Dedicated Relationship Manager", desc: "One expert point of contact from application to disbursal." },
+    { icon: Sparkles, title: "Smart Lender Matching", desc: "We help identify lenders aligned with your profile and requirements." },
+    { icon: FileText, title: "Documentation Assistance", desc: "Get guidance on documents, eligibility checks, and application requirements." },
+    { icon: ShieldCheck, title: "End-to-End Support", desc: "We coordinate the process and follow-ups until the final decision." },
   ];
   return (
     <Section eyebrow="The Nidhivriddhi Advantage" title="Why customers choose Nidhivriddhi">
@@ -440,7 +481,7 @@ function WhyUs() {
 
 function Section({ eyebrow, title, subtitle, children, dark, id }: { eyebrow?: string; title: string; subtitle?: string; children: React.ReactNode; dark?: boolean; id?: string; }) {
   return (
-    <section id={id} className={`py-20 lg:py-28 ${dark ? "bg-hero text-white" : ""}`}>
+    <section id={id} className={`py-12 lg:py-16 ${dark ? "bg-hero text-white" : ""}`}>
       <div className="mx-auto max-w-7xl px-5 lg:px-10">
         <div className="mx-auto mb-12 max-w-2xl text-center">
           {eyebrow && <div className={`text-[11px] font-semibold uppercase tracking-[0.22em] ${dark ? "text-gold" : "text-primary-glow"}`}>{eyebrow}</div>}
@@ -509,7 +550,7 @@ function EmiCalculator() {
               <div className="mt-1 font-semibold">₹ {totalInterest.toLocaleString("en-IN")}</div>
             </div>
           </div>
-          <div className="mt-3 text-center text-xs text-white/50">Interest {interestPct.toFixed(0)}% of total repayment</div>
+
         </div>
       </div>
     </Section>
@@ -562,11 +603,13 @@ function Slider({ label, value, setValue, min, max, step, display, isEditable }:
 }
 
 const TESTIMONIALS = [
-  { name: "Rohan Sharma", role: "Senior Software Engineer — Bengaluru", initials: "RS", review: "Got a personal loan approved in less than 24 hours for my home renovation. The relationship manager handled all the bank coordination smoothly.", rating: 5 },
-  { name: "Priya Iyer", role: "Consultant — Bengaluru", initials: "PI", review: "Consolidated all my high-interest credit card debts into a single personal loan at 10.2% p.a. The monthly savings on interest payments are huge.", rating: 5 },
-  { name: "Aditya Sen", role: "Data Scientist — Pune", initials: "AS", review: "Outstanding rate matching. I was skeptical about the 9.99% rate, but they successfully matched me with a leading lender with minimal documentation.", rating: 5 },
-  { name: "Meera Kapoor", role: "Design Director — Mumbai", initials: "MK", review: "Needed urgent personal funds for a family medical procedure. They got the loan processed and disbursed within 48 hours. Absolute lifesaver.", rating: 5 },
-  { name: "Kunal Verma", role: "Product Manager — Delhi NCR", initials: "KV", review: "Applied for a wedding expenses loan. The portal made it easy to compare and select a bank with flexible pre-closure options and zero hidden charges.", rating: 5 },
+  { name: "Harish Gubbi", role: "Bengaluru", initials: "HG", review: "Got a personal loan approved in less than 24 hours for my home renovation. The relationship manager handled all the bank coordination smoothly.", rating: 5 },
+  { name: "Shashiraj Shetty", role: "Mangalore", initials: "SS", review: "Consolidated all my high-interest credit card debts into a single personal loan at 10.2% p.a. The monthly savings on interest payments are huge.", rating: 5 },
+  { name: "Manoj Mendon", role: "Bengaluru", initials: "MM", review: "Outstanding rate matching. I was skeptical about the 9.99% rate, but they successfully matched me with a leading lender with minimal documentation.", rating: 5 },
+  { name: "Mahesh Raj", role: "Bengaluru", initials: "MR", review: "Needed urgent personal funds for a family medical procedure. They got the loan processed and disbursed within 48 hours. Absolute lifesaver.", rating: 5 },
+  { name: "Shabarish P", role: "Mysore", initials: "SP", review: "Applied for a wedding expenses loan. The portal made it easy to compare and select a bank with flexible pre-closure options and zero hidden charges.", rating: 5 },
+  { name: "Ravi Kumar", role: "Gadag", initials: "RK", review: "Smooth processing and quick response times. The advisory service helped me pick the right lender for my requirements.", rating: 5 },
+  { name: "Oblesh Kanukuntla", role: "Telangana", initials: "OK", review: "Excellent guidance throughout the documentation stage. Secured my loan with minimal hassle and got a highly competitive rate.", rating: 5 },
 ];
 function Testimonials() {
   const loop = [...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS];
@@ -602,12 +645,12 @@ function Testimonials() {
 /* -------------------- How It Works -------------------- */
 function HowItWorks() {
   const steps = [
-    { n: "01", title: "Submit Your Details", desc: "Share basics in 60 seconds — name, mobile and loan requirement.", icon: FileText },
+    { n: "01", title: "Submit Your Details", desc: "Share basics in 60 seconds (name, mobile and loan requirement).", icon: FileText },
     { n: "02", title: "Expert Assessment", desc: "Our advisor matches your profile against 25+ lender criteria.", icon: Users },
     { n: "03", title: "Bank Processing & Disbursal", desc: "We coordinate documentation, approval and fund transfer.", icon: Banknote },
   ];
   return (
-    <Section eyebrow="How It Works" title="From application to disbursal — effortlessly" dark>
+    <Section eyebrow="How It Works" title="From application to disbursal, effortlessly" dark>
       <div className="relative grid gap-6 lg:grid-cols-3">
         <div aria-hidden className="pointer-events-none absolute left-[16%] right-[16%] top-12 hidden h-px bg-gradient-to-r from-transparent via-gold to-transparent lg:block" />
         {steps.map((s) => (
@@ -688,7 +731,7 @@ function Comparison() {
     ["Expert guidance", "Self-research", "Dedicated relationship manager"],
     ["Comparison & negotiation", "Manual", "Done on your behalf"],
     ["Documentation effort", "Repeated for each bank", "Submitted once"],
-    ["Single point of contact", "No", "Yes — always"],
+    ["Single point of contact", "No", "Yes, always"],
     ["Processing follow-ups", "You chase the bank", "We chase the bank"],
   ];
   return (
@@ -715,7 +758,7 @@ function Comparison() {
 function FinalTrust() {
   const loop = [...BANKS, ...BANKS];
   return (
-    <section className="bg-secondary py-16">
+    <section className="bg-secondary py-12">
       <div className="mx-auto max-w-7xl px-5 lg:px-10">
         <div className="text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-primary-glow">25+ Trusted Partners</div>
         <h2 className="mt-3 text-center font-display text-2xl font-semibold text-primary sm:text-3xl">Backed by India's most respected financial institutions</h2>
@@ -726,7 +769,7 @@ function FinalTrust() {
         </div>
       </div>
       <div className="mx-auto mt-12 grid max-w-7xl gap-4 px-5 sm:grid-cols-2 lg:grid-cols-4 lg:px-10">
-        <Counter icon={Wallet} prefix="₹" value={500} suffix="+ Cr" label="Funding Facilitated" />
+        <Counter icon={Wallet} prefix="₹" value={500} suffix="+ Cr" label="Personal Loans Facilitated" />
         <Counter icon={Users} value={10000} suffix="+" label="Customers Assisted" />
         <Counter icon={Star} value={4} suffix=".9/5" label="Average Customer Rating" />
         <Counter icon={Building2} value={25} suffix="+" label="Banking Partners" />
@@ -738,7 +781,7 @@ function FinalTrust() {
 /* -------------------- Final CTA -------------------- */
 function FinalCTA() {
   return (
-    <section id="apply" className="relative isolate overflow-hidden bg-hero py-24 lg:py-32">
+    <section id="apply" className="relative isolate overflow-hidden bg-hero py-16 lg:py-24">
       <div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full opacity-30 blur-3xl" style={{ background: "radial-gradient(circle, oklch(0.78 0.13 82) 0%, transparent 70%)" }} />
       <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-5 lg:grid-cols-2 lg:px-10">
         <div className="text-white">
@@ -748,11 +791,11 @@ function FinalCTA() {
           <h2 className="mt-5 font-display text-4xl font-semibold leading-tight sm:text-5xl lg:text-[3.5rem]">
             See If You're <span className="text-gradient-gold">Eligible Today</span>
           </h2>
-          <p className="mt-5 max-w-md text-lg text-white/75">Get personalized funding options from multiple lenders — within minutes, not days.</p>
+          <p className="mt-5 max-w-md text-lg text-white/75">Get personalized funding options from multiple lenders within minutes, not days.</p>
           <div className="mt-8 grid max-w-md grid-cols-2 gap-3 text-sm">
             <div className="flex items-center gap-2 text-white/80"><ShieldCheck className="h-4 w-4 text-gold" /> RBI-regulated lenders</div>
-            <div className="flex items-center gap-2 text-white/80"><Lock className="h-4 w-4 text-gold" /> 256-bit SSL secured</div>
-            <div className="flex items-center gap-2 text-white/80"><CheckCircle2 className="h-4 w-4 text-gold" /> No impact on credit score</div>
+            <div className="flex items-center gap-2 text-white/80"><CheckCircle2 className="h-4 w-4 text-gold" /> No Impact on Credit Score*</div>
+            <div className="flex items-center gap-2 text-white/80"><Award className="h-4 w-4 text-gold" /> Zero service charges</div>
             <div className="flex items-center gap-2 text-white/80"><Star className="h-4 w-4 text-gold" /> 4.9/5 customer rating</div>
           </div>
         </div>
@@ -833,11 +876,13 @@ function StickyCTA() {
 function FloatingActions() {
   return (
     <div className="fixed bottom-20 right-4 z-40 flex flex-col gap-3 md:bottom-6">
-      <a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener" aria-label="WhatsApp"
+      <a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
         className="grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-luxe transition hover:scale-110 animate-glow">
-        <MessageCircle className="h-6 w-6" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="h-6 w-6 fill-current">
+          <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+        </svg>
       </a>
-      <a href={`tel:${PHONE}`} aria-label="Call" className="hidden h-14 w-14 place-items-center rounded-full bg-primary text-primary-foreground shadow-luxe transition hover:scale-110 md:grid">
+      <a href={`tel:${PHONE}`} aria-label="Call" className="grid h-14 w-14 place-items-center rounded-full bg-primary text-primary-foreground shadow-luxe transition hover:scale-110">
         <Phone className="h-6 w-6" />
       </a>
     </div>
@@ -850,6 +895,8 @@ function ExitIntent() {
   const allowBack = useRef(false);
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [mobileError, setMobileError] = useState("");
   const [done, setDone] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -880,8 +927,23 @@ function ExitIntent() {
   };
 
   const handleSubmit = async () => {
-    if (name.trim().length < 2) return alert("Please enter your full name");
-    if (!/^[6-9]\d{9}$/.test(mobile)) return alert("Please enter a valid 10-digit mobile number");
+    let hasError = false;
+
+    if (name.trim().length < 2) {
+      setNameError("Please enter your full name");
+      hasError = true;
+    } else {
+      setNameError("");
+    }
+
+    if (!/^[6-9]\d{9}$/.test(mobile)) {
+      setMobileError("Please enter a valid 10-digit mobile number");
+      hasError = true;
+    } else {
+      setMobileError("");
+    }
+
+    if (hasError) return;
 
     setSubmitting(true);
     const result = await submitLead({
@@ -920,8 +982,26 @@ function ExitIntent() {
           <div className="mt-6 rounded-2xl bg-secondary p-5 text-center text-sm text-primary animate-fade-up">Thank you! We'll reach out shortly.</div>
         ) : (
           <div className="mt-5 space-y-3">
-            <input disabled={submitting} value={name} onChange={(e) => setName(e.target.value)} placeholder="Full Name" className="w-full rounded-xl border border-input bg-white px-4 py-3 outline-none focus:border-primary disabled:opacity-50" />
-            <input disabled={submitting} value={mobile} onChange={(e) => setMobile(e.target.value.replace(/\D/g, "").slice(0, 10))} placeholder="Mobile Number" className="w-full rounded-xl border border-input bg-white px-4 py-3 outline-none focus:border-primary disabled:opacity-50" />
+            <div>
+              <input disabled={submitting} value={name} 
+                onChange={(e) => {
+                  setName(e.target.value);
+                  if (nameError) setNameError("");
+                }} 
+                placeholder="Full Name" 
+                className={`w-full rounded-xl border bg-white px-4 py-3 outline-none focus:border-primary disabled:opacity-50 ${nameError ? "border-rose-500 focus:border-rose-500" : "border-input"}`} />
+              {nameError && <p className="text-xs font-medium text-rose-500 mt-1">{nameError}</p>}
+            </div>
+            <div>
+              <input disabled={submitting} value={mobile} 
+                onChange={(e) => {
+                  setMobile(e.target.value.replace(/\D/g, "").slice(0, 10));
+                  if (mobileError) setMobileError("");
+                }} 
+                placeholder="Mobile Number" 
+                className={`w-full rounded-xl border bg-white px-4 py-3 outline-none focus:border-primary disabled:opacity-50 ${mobileError ? "border-rose-500 focus:border-rose-500" : "border-input"}`} />
+              {mobileError && <p className="text-xs font-medium text-rose-500 mt-1">{mobileError}</p>}
+            </div>
             <CtaButton onClick={handleSubmit} disabled={submitting}>
               {submitting ? "Submitting..." : <>Check Eligibility <ArrowRight className="h-4 w-4" /></>}
             </CtaButton>
