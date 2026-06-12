@@ -227,27 +227,12 @@ function LeadForm({ compact }: { compact: boolean }) {
 
     if (hasError) return;
     
-    let extraData = {};
-    try {
-      const saved = localStorage.getItem("nv_eligibility");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        extraData = {
-          employment: parsed.employment,
-          income: parsed.income,
-          age: parsed.age,
-          need: parsed.need,
-        };
-      }
-    } catch (e) {}
-
     setSubmitting(true);
     const result = await submitLead({
       name,
       mobile,
       amount,
       formType: compact ? "Compact Lead Form" : "Main Lead Form",
-      ...extraData,
     });
     setSubmitting(false);
 
@@ -498,9 +483,9 @@ function Section({ eyebrow, title, subtitle, children, dark, id }: { eyebrow?: s
 
 /* -------------------- EMI Calculator -------------------- */
 function EmiCalculator() {
-  const [amount, setAmount] = useState(500000);
+  const [amount, setAmount] = useState(100000);
   const [rate, setRate] = useState(9.99);
-  const [tenure, setTenure] = useState(36);
+  const [tenure, setTenure] = useState(60);
 
   const { emi, totalInterest, total } = useMemo(() => {
     const r = rate / 12 / 100;
@@ -914,9 +899,23 @@ function ExitIntent() {
       window.history.pushState(null, "", window.location.href);
     };
 
+    const handleScroll = () => {
+      if (allowBack.current) return;
+      const h = document.documentElement;
+      const total = h.scrollHeight - h.clientHeight;
+      const scrollPct = total > 0 ? (h.scrollTop / total) * 100 : 0;
+      if (scrollPct > 50) {
+        setShow(true);
+        window.removeEventListener("scroll", handleScroll);
+      }
+    };
+
     window.addEventListener("popstate", handlePopState);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    
     return () => {
       window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
