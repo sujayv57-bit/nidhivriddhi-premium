@@ -238,6 +238,9 @@ function LeadForm({ compact }: { compact: boolean }) {
 
     if (result.success) {
       setDone(true);
+      try {
+        sessionStorage.setItem("nv_lead_submitted", "true");
+      } catch (e) {}
     } else {
       alert("Failed to submit eligibility check: " + (result.error || "Unknown error"));
     }
@@ -876,6 +879,13 @@ function ExitIntent() {
     const handlePopState = () => {
       if (allowBack.current) return;
       
+      // If they already submitted the form, do not block or show modal
+      if (sessionStorage.getItem("nv_lead_submitted") === "true") {
+        allowBack.current = true;
+        window.history.back();
+        return;
+      }
+
       // Show the popup
       setShow(true);
       
@@ -883,23 +893,10 @@ function ExitIntent() {
       window.history.pushState(null, "", window.location.href);
     };
 
-    const handleScroll = () => {
-      if (allowBack.current) return;
-      const h = document.documentElement;
-      const total = h.scrollHeight - h.clientHeight;
-      const scrollPct = total > 0 ? (h.scrollTop / total) * 100 : 0;
-      if (scrollPct > 50) {
-        setShow(true);
-        window.removeEventListener("scroll", handleScroll);
-      }
-    };
-
     window.addEventListener("popstate", handlePopState);
-    window.addEventListener("scroll", handleScroll, { passive: true });
     
     return () => {
       window.removeEventListener("popstate", handlePopState);
-      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -938,6 +935,9 @@ function ExitIntent() {
 
     if (result.success) {
       setDone(true);
+      try {
+        sessionStorage.setItem("nv_lead_submitted", "true");
+      } catch (e) {}
       setTimeout(() => {
         setShow(false);
         allowBack.current = true;
