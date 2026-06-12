@@ -794,31 +794,15 @@ function FinalCTA() {
 
 /* -------------------- Footer -------------------- */
 function Footer() {
-  const products = [
-    { icon: Wallet, name: "Personal Loan" },
-    { icon: Briefcase, name: "Business Loan" },
-    { icon: Home, name: "Home Loan" },
-    { icon: Building2, name: "Loan Against Property" },
-    { icon: Factory, name: "Working Capital" },
-    { icon: Stethoscope, name: "Doctor Loan" },
-  ];
   return (
     <footer className="bg-[oklch(0.14_0.04_162)] py-16 text-white/70">
       <div className="mx-auto max-w-7xl px-5 lg:px-10">
-        <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr_1fr]">
+        <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr]">
           <div>
             <div className="flex items-center">
               <img src={logoImg} alt="Nidhivriddhi Logo" className="h-11 w-auto object-contain bg-white rounded-xl px-3.5 py-1.5 shadow-md" />
             </div>
             <p className="mt-5 max-w-sm text-sm">A premium loan advisory partner connecting you with India's leading banks and NBFCs.</p>
-          </div>
-          <div>
-            <div className="text-xs uppercase tracking-[0.2em] text-gold">Loan Products</div>
-            <ul className="mt-4 space-y-2.5 text-sm">
-              {products.map((p) => (
-                <li key={p.name} className="flex items-center gap-2"><p.icon className="h-4 w-4 text-gold/70" /> {p.name}</li>
-              ))}
-            </ul>
           </div>
           <div>
             <div className="text-xs uppercase tracking-[0.2em] text-gold">Get In Touch</div>
