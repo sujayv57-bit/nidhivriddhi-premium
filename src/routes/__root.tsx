@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { getPixelBaseCode, META_PIXEL_ID } from "../lib/meta-pixel";
 
 function NotFoundComponent() {
   return (
@@ -66,10 +67,30 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  const isPixelConfigured = META_PIXEL_ID !== "YOUR_PIXEL_ID_HERE";
   return (
     <html lang="en">
-      <head><HeadContent /></head>
-      <body>{children}<Scripts /></body>
+      <head>
+        <HeadContent />
+        {isPixelConfigured && (
+          <script dangerouslySetInnerHTML={{ __html: getPixelBaseCode() }} />
+        )}
+      </head>
+      <body>
+        {isPixelConfigured && (
+          <noscript>
+            <img
+              height="1"
+              width="1"
+              style={{ display: "none" }}
+              src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
+              alt=""
+            />
+          </noscript>
+        )}
+        {children}
+        <Scripts />
+      </body>
     </html>
   );
 }

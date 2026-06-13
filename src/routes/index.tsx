@@ -5,6 +5,7 @@ import {
   Sparkles, Building2, Users, Wallet, Award, Clock, TrendingUp,
   FileText, IdCard, Receipt, Banknote, Star, ChevronDown, ChevronRight,
   X, Calculator as CalcIcon, Briefcase, Stethoscope, Home, Factory,
+  Globe,
 } from "lucide-react";
 import heroImg from "@/assets/hero-fintech.jpg";
 import logoImg from "@/assets/logo.png";
@@ -133,9 +134,9 @@ function Hero() {
           </ul>
 
           <div className="mt-8 flex items-center gap-5 text-xs text-white/60">
-            <div className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-gold" /> RBI-regulated lenders</div>
+            <div className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 shrink-0 text-gold" /> RBI-regulated lenders</div>
             <div className="hidden h-3 w-px bg-white/20 sm:block" />
-            <div className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-gold" /> No Impact on Credit Score*</div>
+            <div className="flex items-center gap-1.5"><Star className="h-4 w-4 shrink-0 text-gold fill-gold" /> 4.9/5 Customer Rating</div>
           </div>
         </div>
 
@@ -337,7 +338,7 @@ function LeadForm({ compact }: { compact: boolean }) {
               {submitting ? "Submitting..." : <>Check Eligibility <ArrowRight className="h-4 w-4" /></>}
             </CtaButton>
           </div>
-          <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground"><Lock className="h-3.5 w-3.5" /> Secure & Confidential. Your data is encrypted.</p>
+          <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground"><Lock className="h-3.5 w-3.5 shrink-0" /> Secure & Confidential. Your data is encrypted.</p>
         </div>
       )}
     </div>
@@ -733,8 +734,8 @@ function Comparison() {
         {rows.map(([c, a, b], i) => (
           <div key={i} className={`grid grid-cols-3 items-center gap-2 px-6 py-4 text-sm ${i % 2 ? "bg-secondary" : "bg-card"}`}>
             <div className="font-medium text-foreground">{c}</div>
-            <div className="flex items-center justify-center gap-2 text-muted-foreground"><X className="h-4 w-4 text-rose-500" /> {a}</div>
-            <div className="flex items-center justify-center gap-2 font-medium text-primary"><CheckCircle2 className="h-4 w-4 text-emerald-600" /> {b}</div>
+            <div className="flex items-center justify-center gap-2 text-muted-foreground"><X className="h-4 w-4 shrink-0 text-rose-500" /> {a}</div>
+            <div className="flex items-center justify-center gap-2 font-medium text-primary"><CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" /> {b}</div>
           </div>
         ))}
       </div>
@@ -781,10 +782,10 @@ function FinalCTA() {
           </h2>
           <p className="mt-5 max-w-md text-lg text-white/75">Get personalized funding options from multiple lenders within minutes, not days.</p>
           <div className="mt-8 grid max-w-md grid-cols-2 gap-3 text-sm">
-            <div className="flex items-center gap-2 text-white/80"><ShieldCheck className="h-4 w-4 text-gold" /> RBI-regulated lenders</div>
-            <div className="flex items-center gap-2 text-white/80"><CheckCircle2 className="h-4 w-4 text-gold" /> No Impact on Credit Score*</div>
-            <div className="flex items-center gap-2 text-white/80"><Award className="h-4 w-4 text-gold" /> Zero service charges</div>
-            <div className="flex items-center gap-2 text-white/80"><Star className="h-4 w-4 text-gold" /> 4.9/5 customer rating</div>
+            <div className="flex items-center gap-2 text-white/80"><ShieldCheck className="h-4 w-4 shrink-0 text-gold" /> RBI-regulated lenders</div>
+            <div className="flex items-center gap-2 text-white/80"><CheckCircle2 className="h-4 w-4 shrink-0 text-gold" /> No Impact on Credit Score*</div>
+            <div className="flex items-center gap-2 text-white/80"><Award className="h-4 w-4 shrink-0 text-gold" /> Zero service charges</div>
+            <div className="flex items-center gap-2 text-white/80"><Star className="h-4 w-4 shrink-0 text-gold" /> 4.9/5 customer rating</div>
           </div>
         </div>
         <div className="rounded-3xl glass p-7 shadow-luxe sm:p-9">
@@ -812,15 +813,15 @@ function Footer() {
             <ul className="mt-4 space-y-2.5 text-sm">
               <li className="flex items-center gap-2">
                 <a href={`tel:${PHONE}`} className="flex items-center gap-2 hover:text-white transition">
-                  <Phone className="h-4 w-4 text-gold/70" /> {PHONE}
+                  <Phone className="h-4 w-4 shrink-0 text-gold/70" /> {PHONE}
                 </a>
               </li>
               <li className="flex items-center gap-2">
-                <a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition">
-                  <MessageCircle className="h-4 w-4 text-gold/70" /> WhatsApp Support
+                <a href="https://www.nidhivriddhi.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition">
+                  <Globe className="h-4 w-4 shrink-0 text-gold/70" /> www.nidhivriddhi.com
                 </a>
               </li>
-              <li className="flex items-center gap-2"><Clock className="h-4 w-4 text-gold/70" /> Mon–Sat, 10 AM–7 PM</li>
+              <li className="flex items-center gap-2"><Clock className="h-4 w-4 shrink-0 text-gold/70" /> Mon–Sat, 10 AM–7 PM</li>
             </ul>
           </div>
         </div>

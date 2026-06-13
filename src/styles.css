@@ -38,116 +38,231 @@
   --font-display: "Poppins", "Inter", sans-serif;
   --font-sans: "Inter", system-ui, sans-serif;
 
-  --shadow-luxe: 0 30px 80px -20px color-mix(in oklab, var(--primary) 45%, transparent);
-  --shadow-gold: 0 20px 50px -15px color-mix(in oklab, var(--gold) 55%, transparent);
+  --shadow-luxe:
+    0 1px 2px oklch(0.25 0.065 160 / 0.04),
+    0 4px 8px oklch(0.25 0.065 160 / 0.04),
+    0 16px 48px -8px oklch(0.25 0.065 160 / 0.12);
+  --shadow-gold:
+    0 1px 2px oklch(0.76 0.14 80 / 0.06),
+    0 8px 24px -4px oklch(0.76 0.14 80 / 0.18);
 }
 
 :root {
-  --radius: 0.875rem;
+  --radius: 0.5rem;
 
-  /* Warm white background */
-  --background: oklch(0.985 0.008 95);
-  --foreground: oklch(0.18 0.04 160);
+  /* Clean white — the faintest green whisper, not cream, not cold */
+  --background: oklch(0.99 0.003 160);
+  --foreground: oklch(0.14 0.04 160);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.04 160);
+  --card-foreground: oklch(0.14 0.04 160);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.04 160);
+  --popover-foreground: oklch(0.14 0.04 160);
 
-  /* Deep luxurious dark green */
-  --primary: oklch(0.27 0.06 160);
-  --primary-foreground: oklch(0.98 0.01 95);
-  --primary-glow: oklch(0.42 0.10 158);
+  /* Deep luxurious dark green — the identity anchor */
+  --primary: oklch(0.24 0.065 160);
+  --primary-foreground: oklch(0.98 0.005 160);
+  --primary-glow: oklch(0.38 0.10 158);
 
-  --secondary: oklch(0.96 0.012 150);
-  --secondary-foreground: oklch(0.27 0.06 160);
+  --secondary: oklch(0.965 0.006 160);
+  --secondary-foreground: oklch(0.24 0.065 160);
 
-  --muted: oklch(0.95 0.01 100);
-  --muted-foreground: oklch(0.48 0.025 160);
+  --muted: oklch(0.955 0.005 160);
+  --muted-foreground: oklch(0.36 0.03 160);
 
-  --accent: oklch(0.93 0.03 155);
-  --accent-foreground: oklch(0.22 0.05 160);
+  --accent: oklch(0.94 0.018 158);
+  --accent-foreground: oklch(0.18 0.05 160);
 
-  /* Champagne gold */
-  --gold: oklch(0.78 0.13 82);
-  --gold-foreground: oklch(0.20 0.04 80);
+  /* Champagne gold — warm, rich, anchored */
+  --gold: oklch(0.76 0.14 80);
+  --gold-foreground: oklch(0.16 0.04 80);
 
-  --destructive: oklch(0.58 0.22 27);
+  --destructive: oklch(0.53 0.22 27);
   --destructive-foreground: oklch(0.98 0 0);
 
-  --border: oklch(0.90 0.015 130);
-  --input: oklch(0.92 0.012 130);
-  --ring: oklch(0.42 0.10 158);
+  --border: oklch(0.92 0.008 160);
+  --input: oklch(0.935 0.006 160);
+  --ring: oklch(0.38 0.10 158);
 
-  --gradient-hero: linear-gradient(135deg, oklch(0.20 0.05 160) 0%, oklch(0.30 0.07 158) 55%, oklch(0.18 0.04 162) 100%);
-  --gradient-gold: linear-gradient(135deg, oklch(0.85 0.13 88), oklch(0.72 0.15 78));
-  --gradient-surface: linear-gradient(180deg, oklch(0.99 0.005 95) 0%, oklch(0.96 0.012 130) 100%);
+  --gradient-hero: linear-gradient(
+    160deg,
+    oklch(0.15 0.045 165) 0%,
+    oklch(0.26 0.07 158) 48%,
+    oklch(0.13 0.04 168) 100%
+  );
+  --gradient-gold: linear-gradient(135deg, oklch(0.82 0.14 85), oklch(0.68 0.16 74));
+  --gradient-surface: linear-gradient(
+    180deg,
+    oklch(0.99 0.003 160) 0%,
+    oklch(0.965 0.006 160) 100%
+  );
 }
+
+/* ─────────────────────────────────────────────────── */
+/*  Base layer                                         */
+/* ─────────────────────────────────────────────────── */
 
 @layer base {
   * {
     border-color: var(--color-border);
   }
-  html { scroll-behavior: smooth; }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "ss01", "cv11";
+    text-rendering: optimizeLegibility;
+    line-height: 1.6;
   }
-  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+    line-height: 1.15;
+  }
+
+  p {
+    text-wrap: pretty;
+    max-width: 75ch;
+  }
+
+  /* Keyboard-only focus ring */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Selection */
+  ::selection {
+    background: oklch(0.76 0.14 80 / 0.2);
+    color: var(--foreground);
+  }
+
+  /* Inputs: remove native number spinners */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+
 }
 
+/* ─────────────────────────────────────────────────── */
+/*  Utilities                                          */
+/* ─────────────────────────────────────────────────── */
+
 @utility glass {
-  background: color-mix(in oklab, white 75%, transparent);
-  backdrop-filter: blur(20px) saturate(140%);
-  border: 1px solid color-mix(in oklab, white 60%, transparent);
+  background: oklch(1 0 0 / 0.8);
+  backdrop-filter: blur(24px) saturate(1.3);
+  border: 1px solid oklch(1 0 0 / 0.45);
 }
+
 @utility glass-dark {
-  background: color-mix(in oklab, oklch(0.20 0.05 160) 55%, transparent);
-  backdrop-filter: blur(24px) saturate(160%);
-  border: 1px solid color-mix(in oklab, oklch(0.85 0.13 88) 18%, transparent);
+  background: oklch(0.15 0.045 160 / 0.65);
+  backdrop-filter: blur(24px) saturate(1.5);
+  border: 1px solid oklch(0.76 0.14 80 / 0.1);
 }
+
+/* Solid gold, high-legibility — no gradient-clip hack */
 @utility text-gradient-gold {
-  background: var(--gradient-gold);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: oklch(0.82 0.14 82);
 }
+
 @utility bg-hero {
   background: var(--gradient-hero);
 }
+
 @utility shadow-luxe {
   box-shadow: var(--shadow-luxe);
 }
+
 @utility shadow-gold {
   box-shadow: var(--shadow-gold);
 }
+
+/* ─────────────────────────────────────────────────── */
+/*  Keyframes                                          */
+/* ─────────────────────────────────────────────────── */
 
 @keyframes marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
+
 @keyframes float-y {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
+
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
+
 @keyframes glow-pulse {
-  0%,100% { box-shadow: 0 0 30px -5px color-mix(in oklab, var(--gold) 50%, transparent); }
-  50% { box-shadow: 0 0 60px -5px color-mix(in oklab, var(--gold) 80%, transparent); }
-}
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  0%, 100% { box-shadow: 0 0 20px -4px oklch(0.76 0.14 80 / 0.3); }
+  50% { box-shadow: 0 0 40px -4px oklch(0.76 0.14 80 / 0.5); }
 }
 
-@utility animate-marquee { animation: marquee 40s linear infinite; }
-@utility animate-marquee-slow { animation: marquee 100s linear infinite; }
-@utility animate-float { animation: float-y 6s ease-in-out infinite; }
-@utility animate-glow { animation: glow-pulse 3s ease-in-out infinite; }
-@utility animate-fade-up { animation: fade-up 0.7s ease-out both; }
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─────────────────────────────────────────────────── */
+/*  Animation utilities                                */
+/* ─────────────────────────────────────────────────── */
+
+@utility animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+@utility animate-marquee-slow {
+  animation: marquee 100s linear infinite;
+}
+@utility animate-float {
+  animation: float-y 6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+@utility animate-glow {
+  animation: glow-pulse 3s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+@utility animate-fade-up {
+  animation: fade-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ─────────────────────────────────────────────────── */
+/*  Reduced motion — respect user preference           */
+/* ─────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

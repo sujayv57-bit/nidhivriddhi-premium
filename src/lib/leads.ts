@@ -1,3 +1,5 @@
+import { trackLeadEvent } from "./meta-tracking";
+
 export interface LeadData {
   name: string;
   mobile: string;
@@ -129,6 +131,15 @@ export async function submitLead(data: LeadData): Promise<{ success: boolean; er
       match.synced = true;
       saveQueue(currentQueue);
     }
+
+    // 3. Fire Meta Pixel + CAPI Lead event (best-effort, never blocks UX)
+    trackLeadEvent({
+      name: data.name,
+      mobile: data.mobile,
+      amount: data.amount,
+      formType: data.formType,
+    }).catch(() => {});
+
     return { success: true };
   }
 
