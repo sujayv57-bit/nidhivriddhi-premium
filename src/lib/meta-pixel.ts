@@ -10,7 +10,7 @@
 // ──────────────────────────────────────────────
 // 🔧 REPLACE THIS with your real Meta Pixel ID
 // ──────────────────────────────────────────────
-export const META_PIXEL_ID = "997235889678002";
+export const META_PIXEL_ID = "1009525434683863";
 
 // Minimal type declaration for the fbq global
 declare global {
